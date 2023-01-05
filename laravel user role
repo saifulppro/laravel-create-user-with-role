@@ -1,0 +1,20 @@
+private function create_user_with_role($type, $name, $email){
+        $role = Role::create([
+            'name' => $type
+        ]);
+
+        $user = User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt('admin'),
+        ]);
+        if($type == 'Super Admin'){
+            $permission = Permission::create([
+                'name' => 'create-admin',
+            ]);
+            $role->givePermission($permission);
+        }
+
+        $user->assignRole($role);
+        return $user;
+    }
